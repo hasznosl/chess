@@ -5,4 +5,5 @@ class Pawn < Piece
   def draw
     "P"
   end
+
 end
