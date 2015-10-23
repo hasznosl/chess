@@ -1,14 +1,14 @@
 require './rook.rb'
 
-class WhiteRook < Rook
+class BlackRook < Rook
 
   def can_move to_coords
     if ((to_coords[0] == @coords[0]) || (to_coords[1] == @coords[1])) && #in same row or column
-       (!@board.board_hash[symbolize(to_coords)].class.name.include? "White") &&
+       (!@board.board_hash[symbolize(to_coords)].class.name.include? "Black") &&
        (!road_blocked? to_coords)# road not blocked
       true
     elsif ((to_coords[0] == @coords[0]) || (to_coords[1] == @coords[1])) && #same row or column
-          (@board.board_hash[symbolize(to_coords)].class.name.include? "Black") && #enemy piece
+          (@board.board_hash[symbolize(to_coords)].class.name.include? "White") && #enemy piece
           (!road_blocked? to_coords)#road not blocked
       true
     else
