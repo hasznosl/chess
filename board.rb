@@ -32,14 +32,12 @@ class Board < ChessItem
       coords = Array.new
       to_coords = Array.new
       puts ""
-      puts "Give a coord to move"
+      puts "Give coords and to_coords (eg.: a2a3)"
       input = gets.chomp
       coords.push(input.split(//)[0].ord - 'a'.ord + 1)
       coords.push(input.split(//)[1].to_i)
-      puts "Give a target coord"
-      input = gets.chomp
-      to_coords.push(input.split(//)[0].ord - 'a'.ord + 1)
-      to_coords.push(input.split(//)[1].to_i)
+      to_coords.push(input.split(//)[2].ord - 'a'.ord + 1)
+      to_coords.push(input.split(//)[3].to_i)
       @board_hash[symbolize(coords)].move(to_coords)
     end
   end
