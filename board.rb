@@ -1,6 +1,7 @@
 require './chess_item.rb'
 require './black_pawn.rb'
 require './white_pawn.rb'
+require './white_rook.rb'
 
 class Board < ChessItem
 
@@ -12,12 +13,16 @@ class Board < ChessItem
         if(y+1 < 5) #white side
           if(y+1 == 2)
             @board_hash[symbolize([x+1, y+1])] = WhitePawn.new([x+1,y+1], self)
+          elsif(((x+1 == 8) || (x+1==1)) && (y+1 == 1))#Rook at the corner
+            @board_hash[symbolize([x+1, y+1])] = WhiteRook.new([x+1,y+1], self)
           else
             @board_hash[symbolize([x+1, y+1])] = true
           end
         else #black side
           if(y+1 == 7)
             @board_hash[symbolize([x+1, y+1])] = BlackPawn.new([x+1,y+1], self)
+          elsif(((x+1 == 8) || (x+1==1)) && (y+1 == 8))#Rook at the corner
+            @board_hash[symbolize([x+1, y+1])] = WhiteRook.new([x+1,y+1], self)
           else
             @board_hash[symbolize([x+1, y+1])] = true
           end
