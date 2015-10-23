@@ -7,8 +7,18 @@ class Piece < ChessItem
     @board = board
   end
 
+  def occupied? arr_of_coords
+    arr_of_coords.each do |coord|
+      if(@board.board_hash[symbolize(coord)].is_a? Piece)
+        raise "#{coord} is occupied"
+        return true
+      end
+    end
+    return false
+  end
+
   def can_move to_coords
-    true #remember, this is just a piece
+    false
   end
 
   def move to_coords
