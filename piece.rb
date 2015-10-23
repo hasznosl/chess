@@ -8,10 +8,13 @@ class Piece < ChessItem
     @color = color
   end
 
-  def sees
+  def sees to_coords
   end
 
-  def move
+  def move to_coords
+    @board.board_hash[symbolize(@coords)] = true
+    @board.board_hash[symbolize(to_coords)] = self
+    @coords = to_coords
   end
 
   def hit_n_move

@@ -3,6 +3,7 @@ require './pawn.rb'
 
 class Board < ChessItem
 
+  attr_accessor :board_hash
   def initialize
     @board_hash = Hash.new(false)
     8.times do |x|
@@ -24,9 +25,25 @@ class Board < ChessItem
         end
       end
     end
-    draw
   end
 
+  def run_game
+    while true
+      draw
+      coords = Array.new
+      to_coords = Array.new
+      puts ""
+      puts "Give a coord to move"
+      input = gets.chomp
+      coords.push(input.split(//)[0].ord - 'a'.ord + 1)
+      coords.push(input.split(//)[1].to_i)
+      puts "Give a target coord"
+      input = gets.chomp
+      to_coords.push(input.split(//)[0].ord - 'a'.ord + 1)
+      to_coords.push(input.split(//)[1].to_i)
+      @board_hash[symbolize(coords)].move(to_coords)
+    end
+  end
 
   def draw
 
@@ -62,4 +79,4 @@ class Board < ChessItem
 end
 
 
-Board.new
+Board.new.run_game
