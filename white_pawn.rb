@@ -9,7 +9,7 @@ class WhitePawn < Pawn
         true
       elsif ((to_coords[0] + 1 == @coords[0]) || (to_coords[0] - 1 == @coords[0])) &&  #wants to step one col left or right?
             (@coords[1] + 1 == to_coords[1]) && #wants to step exactly one step forward?
-            (@board.board_hash[symbolize(to_coords)].class.include?("Black")) #black piece at the target coords?
+            (@board.board_hash[symbolize(to_coords)].class.name.include?("Black")) #black piece at the target coords?
         true
       else
         raise "cant move to #{to_coords}"
