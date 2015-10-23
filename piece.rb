@@ -2,9 +2,10 @@ class Piece < ChessItem
   attr_reader :color
   attr_reader :coords
 
-  def initialize(coords, board)
+  def initialize(coords, board, color)
     @coords = coords
     @board = board
+    @color = color
   end
 
   def sees

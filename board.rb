@@ -1,55 +1,65 @@
-class Board < ChessItem
+require './chess_item.rb'
+require './pawn.rb'
 
+class Board < ChessItem
 
   def initialize
     @board_hash = Hash.new(false)
     8.times do |x|
-      8.each do |y|
-        if(y < 5) #white side
+      8.times do |y|
+        if(y+1 < 5) #white side
           color = "white"
-          if(y == 2)
-            @board_hash[symbolize([x, y])] = Pawn.new(color)
+          if(y+1 == 2)
+            @board_hash[symbolize([x+1, y+1])] = Pawn.new([x+1,y+1], self, color)
           else
-            @board_hash[symbolize([x, y])] = true
+            @board_hash[symbolize([x+1, y+1])] = true
           end
         else #black side
           color = "black"
-          if(y == 7)
-            @board_hash[symbolize([x, y])] = Pawn.new(color)
+          if(y+1 == 7)
+            @board_hash[symbolize([x+1, y+1])] = Pawn.new([x+1,y+1], self, color)
           else
-            @board_hash[symbolize([x, y])] = true
+            @board_hash[symbolize([x+1, y+1])] = true
           end
         end
       end
     end
+    draw
   end
 
 
   def draw
 
     puts "  ------------------------------- "
-    puts "8|   |   |   |   |   |   |   |   |"
+    puts "8| #{dp [1, 8]} | #{dp [2, 8]} | #{dp [3, 8]} | #{dp [4, 8]} | #{dp [5, 8]} | #{dp [6, 8]} | #{dp [7, 8]} | #{dp [8, 8]} |"
     puts "  ------------------------------- "
-    puts "7|   |   |   |   |   |   |   |   |"
+    puts "7| #{dp [1, 7]} | #{dp [2, 7]} | #{dp [3, 7]} | #{dp [4, 7]} | #{dp [5, 7]} | #{dp [6, 7]} | #{dp [7, 7]} | #{dp [8, 7]} |"
     puts "  ------------------------------- "
-    puts "6|   |   |   |   |   |   |   |   |"
+    puts "6| #{dp [1, 6]} | #{dp [2, 6]} | #{dp [3, 6]} | #{dp [4, 6]} | #{dp [5, 6]} | #{dp [6, 6]} | #{dp [7, 6]} | #{dp [8, 6]} |"
     puts "  ------------------------------- "
-    puts "5|   |   |   |   |   |   |   |   |"
+    puts "5| #{dp [1, 5]} | #{dp [2, 5]} | #{dp [3, 5]} | #{dp [4, 5]} | #{dp [5, 5]} | #{dp [6, 5]} | #{dp [7, 5]} | #{dp [8, 5]} |"
     puts "  ------------------------------- "
-    puts "4|   |   |   |   |   |   |   |   |"
+    puts "4| #{dp [1, 4]} | #{dp [2, 4]} | #{dp [3, 4]} | #{dp [4, 4]} | #{dp [5, 4]} | #{dp [6, 4]} | #{dp [7, 4]} | #{dp [8, 4]} |"
     puts "  ------------------------------- "
-    puts "3|   |   |   |   |   |   |   |   |"
+    puts "3| #{dp [1, 3]} | #{dp [2, 3]} | #{dp [3, 3]} | #{dp [4, 3]} | #{dp [5, 3]} | #{dp [6, 3]} | #{dp [7, 3]} | #{dp [8, 3]} |"
     puts "  ------------------------------- "
-    puts "2|   |   |   |   |   |   |   |   |"
+    puts "2| #{dp [1, 2]} | #{dp [2, 2]} | #{dp [3, 2]} | #{dp [4, 2]} | #{dp [5, 2]} | #{dp [6, 2]} | #{dp [7, 2]} | #{dp [8, 2]} |"
     puts "  ------------------------------- "
-    puts "1|   |   |   |   |   |   |   |   |"
+    puts "1| #{dp [1, 1]} | #{dp [2, 1]} | #{dp [3, 1]} | #{dp [4, 1]} | #{dp [5, 1]} | #{dp [6, 1]} | #{dp [7, 1]} | #{dp [8, 1]} |"
     puts "  ------------------------------- "
     puts "   a   b   c   d   e   f   g   h  "
 
   end
 
   def dp coords #stands for draw piece
-    ret = "*"
-    @board_hash(symbolize(coords))
+    string = " "
+    square = @board_hash[(symbolize(coords))]
+    if square.is_a? Piece
+      string = square.draw
+    end
+    string
   end
 end
+
+
+Board.new
