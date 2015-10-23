@@ -7,6 +7,8 @@ require './white_knight.rb'
 require './black_knight.rb'
 require './white_bishop.rb'
 require './black_bishop.rb'
+require './white_queen.rb'
+require './black_queen.rb'
 
 class Board < ChessItem
 
@@ -24,6 +26,8 @@ class Board < ChessItem
             @board_hash[symbolize([x+1,   y+1])] = WhiteKnight.new([x+1,y+1], self)
           elsif((x+1 == 3) || (x+1==6)) && (y+1 == 1)#white bishop
             @board_hash[symbolize([x+1,   y+1])] = WhiteBishop.new([x+1,y+1], self)
+          elsif( x+1 == 4 ) && (y+1 == 1)#white Queen
+            @board_hash[symbolize([x+1, y+1])] = WhiteQueen.new([x+1,y+1], self)
           else
             @board_hash[symbolize([x+1, y+1])] = true
           end
@@ -36,6 +40,8 @@ class Board < ChessItem
             @board_hash[symbolize([x+1, y+1])] = BlackKnight.new([x+1,y+1], self)
           elsif((x+1 == 3) || (x+1==6)) && (y+1 == 8)#black bishop
             @board_hash[symbolize([x+1,   y+1])] = BlackBishop.new([x+1,y+1], self)
+          elsif( x+1 == 4 ) && (y+1 == 8)#black Queen
+            @board_hash[symbolize([x+1, y+1])] = BlackQueen.new([x+1,y+1], self)
           else
             @board_hash[symbolize([x+1, y+1])] = true
           end
