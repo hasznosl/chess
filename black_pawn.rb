@@ -17,7 +17,8 @@ class BlackPawn < Pawn
       end
     elsif (to_coords[0] == @coords[0]) &&  # wants to stay in same column
           (@coords[1] - 1 == to_coords[1]) &&  #wants to step one forward?
-          !occupied?([to_coords])  # way not blocked?
+          !occupied?([to_coords])&&  # way not blocked?
+          (@board.board_hash[symbolize(to_coords)] != false) #inside the board
       true
     elsif ((to_coords[0] + 1 == @coords[0]) || (to_coords[0] - 1 == @coords[0])) &&  #wants to step one col left or right?
           (@coords[1] - 1 == to_coords[1]) && #wants to step exactly one step forward?

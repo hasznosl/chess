@@ -5,7 +5,30 @@ class Piece < ChessItem
   def initialize(coords, board)
     @coords = coords
     @board = board
+    @checks_coords = checks
   end
+
+  def checks
+    nil# override in specific classes
+  end
+
+  def move to_coords
+    if can_move to_coords
+      @board.board_hash[symbolize(@coords)] = true
+      @board.board_hash[symbolize(to_coords)] = self
+      @coords = to_coords
+      checks
+    else
+      #do nothing
+    end
+  end
+
+
+  def draw
+    puts "This is just a piece.. Any special?"
+  end
+
+  private
 
   def occupied? arr_of_coords
     arr_of_coords.each do |coord|
@@ -21,19 +44,5 @@ class Piece < ChessItem
     false
   end
 
-  def move to_coords
-    if can_move to_coords
-      @board.board_hash[symbolize(@coords)] = true
-      @board.board_hash[symbolize(to_coords)] = self
-      @coords = to_coords
-    else
-      #do nothing
-    end
-  end
-
-
-  def draw
-    puts "This is just a piece.. Any special?"
-  end
 
 end
