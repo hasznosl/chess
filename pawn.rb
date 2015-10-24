@@ -6,11 +6,14 @@ class Pawn < Piece
     "P"
   end
 
-  def checks
-    @checks = Array.new
-    @checks.push([@coords[0] + 1, @coords[1] + 1])
-    @checks.push([@coords[0] - 1, @coords[1] + 1])
-    @checks
+  def occupied? arr_of_coords
+    arr_of_coords.each do |coord|
+      if(@board.board_hash[symbolize(coord)].is_a? Piece)
+        raise "#{coord} is occupied"
+        return true
+      end
+    end
+    return false
   end
 
 end

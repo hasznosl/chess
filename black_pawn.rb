@@ -1,6 +1,15 @@
 require "./pawn.rb"
 
 class BlackPawn < Pawn
+
+  def refresh_checks
+    @checks = Array.new
+    @checks.push([@coords[0] - 1, @coords[1] - 1]) if @board.board_hash[symbolize([@coords[0] - 1, @coords[1] - 1])]
+    @checks.push([@coords[0] + 1, @coords[1] - 1]) if @board.board_hash[symbolize([@coords[0] + 1, @coords[1] - 1])]
+    colorize_checked
+    @checks
+  end
+
   def can_move to_coords
     if(@coords[1] == 7) #pawn at starting position?
       if (to_coords[0] == @coords[0]) && #wants to move in same column

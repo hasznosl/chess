@@ -8,11 +8,19 @@ class Piece < ChessItem
   def initialize(coords, board)
     @coords = coords
     @board = board
-    @checks_coords = checks
   end
 
-  def checks
-    nil# override in specific classes
+  def refresh_checks
+    puts "wrong checks called"# override in specific classes
+  end
+
+  def colorize_checked
+    #should be nil eventually, this is only for debugging
+    @checks.each do |coord|
+      if (@board.board_hash[symbolize(coord)] == true )
+        @board.board_hash[symbolize(coord)] = :yellow
+      end
+    end
   end
 
   def move to_coords
@@ -20,7 +28,7 @@ class Piece < ChessItem
       @board.board_hash[symbolize(@coords)] = true
       @board.board_hash[symbolize(to_coords)] = self
       @coords = to_coords
-      checks
+      refresh_checks
     else
       #do nothing
     end
@@ -33,15 +41,7 @@ class Piece < ChessItem
 
   private
 
-  def occupied? arr_of_coords
-    arr_of_coords.each do |coord|
-      if(@board.board_hash[symbolize(coord)].is_a? Piece)
-        raise "#{coord} is occupied"
-        return true
-      end
-    end
-    return false
-  end
+
 
   def can_move to_coords
     false

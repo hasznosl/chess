@@ -35,7 +35,7 @@ class Board < ChessItem
             @whites.push piece
           elsif((x+1 == 2) || (x+1==7)) && (y+1 == 1)#white night
             piece = WhiteKnight.new([x+1,y+1], self)
-            @board_hash[symbolize([x+1,   y+1])] = piece
+            @board_hash[symbolize([x+1,y+1])] = piece
             @whites.push piece
           elsif((x+1 == 3) || (x+1==6)) && (y+1 == 1)#white bishop
             piece = WhiteBishop.new([x+1,y+1], self)
@@ -83,18 +83,45 @@ class Board < ChessItem
         end
       end
     end
+
+
+
+    @whites.each do |white|
+      white.refresh_checks
+    end
+
+    @blacks.each do |black|
+      black.refresh_checks
+    end
   end
 
   def run_game
     white_turn = true
 
+
     while true
-      # @whites.each do |white|
-      #   white.checks.each do |checked|
-      #     puts "checked #{checked}"
+
+      #only for debugging
+      # checked_by_black = Array.new
+      # @blacks.each do |black|
+      #   if black.checks != nil
+      #     black.checks.each do |checked|
+      #       unless checked_by_black.include? checked
+      #         puts "#{checked} checked by #{black}"
+      #         checked_by_black.push checked
+      #       end
+      #     end
       #   end
       # end
+
       draw
+      (1..8).each do |x|
+        (1..8).each do |y|
+          if (@board_hash[symbolize([x, y])].is_a?(Symbol))
+            @board_hash[symbolize([x, y])] = true
+          end
+        end
+      end
       coords = Array.new
       to_coords = Array.new
       puts ""
@@ -145,6 +172,8 @@ class Board < ChessItem
     square = @board_hash[(symbolize(coords))]
     if square.is_a? Piece
       string = square.draw
+    elsif square.is_a? Symbol
+          string = "*".colorize(square)
     end
     string
   end
