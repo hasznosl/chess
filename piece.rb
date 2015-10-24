@@ -24,13 +24,19 @@ class Piece < ChessItem
   end
 
   def move to_coords
+
     if can_move to_coords
+      if (to_coords == @coords)
+        @board.not_moved = true
+      else
+        @board.not_moved = false
+      end
       @board.board_hash[symbolize(@coords)] = true
       @board.board_hash[symbolize(to_coords)] = self
       @coords = to_coords
       refresh_checks
     else
-      #do nothing
+      @board.not_moved = true
     end
   end
 

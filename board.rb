@@ -17,8 +17,10 @@ class Board < ChessItem
   attr_accessor :board_hash
   attr_reader :whites
   attr_reader :blacks
+  attr_writer :not_moved
 
   def initialize
+    @not_moved = false
     @board_hash = Hash.new(false)
     @whites = Array.new
     @blacks = Array.new
@@ -47,6 +49,7 @@ class Board < ChessItem
             @whites.push piece
           elsif( x+1 == 5 ) && (y+1 == 1)#white King
             piece = WhiteKing.new([x+1,y+1], self)
+            @white_king = piece
             @board_hash[symbolize([x+1, y+1])] = piece
             @whites.push piece
           else
@@ -75,6 +78,7 @@ class Board < ChessItem
             @blacks.push piece
           elsif( x+1 == 5 ) && (y+1 == 8)#white King
             piece = BlackKing.new([x+1,y+1], self)
+            @black_king = piece
             @board_hash[symbolize([x+1, y+1])] = piece
             @blacks.push piece
           else
@@ -122,6 +126,7 @@ class Board < ChessItem
           end
         end
       end
+      puts check_if_checked
       coords = Array.new
       to_coords = Array.new
       puts ""
@@ -139,10 +144,37 @@ class Board < ChessItem
         white_turn ^= true
       else
         @board_hash[symbolize(coords)].move(to_coords)
+        if @not_moved
+          puts "Looks like that was not a legal move.".colorize(:red)
+          white_turn ^= true
+        end
       end
       white_turn ^= true
     end
   end
+
+
+  def check_if_checked
+    @whites.each do |white|
+      white.checks.each do |checked|
+        if @black_king.coords == checked
+          return "Black King checked!"
+        end
+      end
+    end
+
+    @blacks.each do |black|
+      black.checks.each do |checked|
+        if @white_king.coords == checked
+          return "White King checked!"
+        end
+      end
+    end
+
+    return ""
+
+  end
+
 
   def draw
 

@@ -15,7 +15,7 @@ class WhiteKing < King
 
 
   def checked to_coords
-    @board.whites.each do |piece|
+    @board.blacks.each do |piece|
       piece.checks.each do |checked|
         if to_coords == checked
           return true
