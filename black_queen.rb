@@ -16,4 +16,7 @@ class BlackQueen < Queen
     end
   end
 
+  def draw
+    "Q".colorize(:blue)
+  end
 end

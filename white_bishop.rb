@@ -14,6 +14,9 @@ class WhiteBishop < Bishop
   end
 
 
+  def draw
+    "B".colorize(:cyan)
+  end
 
 
 end

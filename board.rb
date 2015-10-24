@@ -15,39 +15,68 @@ require './black_king.rb'
 class Board < ChessItem
 
   attr_accessor :board_hash
+  attr_reader :whites
+  attr_reader :blacks
+
   def initialize
     @board_hash = Hash.new(false)
+    @whites = Array.new
+    @blacks = Array.new
     8.times do |x|
       8.times do |y|
         if(y+1 < 5) #white side
           if(y+1 == 2)
-            @board_hash[symbolize([x+1, y+1])] = WhitePawn.new([x+1,y+1], self)
+            piece = WhitePawn.new([x+1,y+1], self)
+            @whites.push piece
+            @board_hash[symbolize([x+1, y+1])] = piece
           elsif(((x+1 == 8) || (x+1==1)) && (y+1 == 1))#Rook at the corner
-            @board_hash[symbolize([x+1, y+1])] = WhiteRook.new([x+1,y+1], self)
+            piece = WhiteRook.new([x+1,y+1], self)
+            @board_hash[symbolize([x+1, y+1])] = piece
+            @whites.push piece
           elsif((x+1 == 2) || (x+1==7)) && (y+1 == 1)#white night
-            @board_hash[symbolize([x+1,   y+1])] = WhiteKnight.new([x+1,y+1], self)
+            piece = WhiteKnight.new([x+1,y+1], self)
+            @board_hash[symbolize([x+1,   y+1])] = piece
+            @whites.push piece
           elsif((x+1 == 3) || (x+1==6)) && (y+1 == 1)#white bishop
-            @board_hash[symbolize([x+1,   y+1])] = WhiteBishop.new([x+1,y+1], self)
+            piece = WhiteBishop.new([x+1,y+1], self)
+            @board_hash[symbolize([x+1,   y+1])] = piece
+            @whites.push piece
           elsif( x+1 == 4 ) && (y+1 == 1)#white Queen
-            @board_hash[symbolize([x+1, y+1])] = WhiteQueen.new([x+1,y+1], self)
+            piece = WhiteQueen.new([x+1,y+1], self)
+            @board_hash[symbolize([x+1, y+1])] = piece
+            @whites.push piece
           elsif( x+1 == 5 ) && (y+1 == 1)#white King
-            @board_hash[symbolize([x+1, y+1])] = WhiteKing.new([x+1,y+1], self)
+            piece = WhiteKing.new([x+1,y+1], self)
+            @board_hash[symbolize([x+1, y+1])] = piece
+            @whites.push piece
           else
             @board_hash[symbolize([x+1, y+1])] = true
           end
         else #black side
           if(y+1 == 7)
-            @board_hash[symbolize([x+1, y+1])] = BlackPawn.new([x+1,y+1], self)
+            piece = BlackPawn.new([x+1,y+1], self)
+            @board_hash[symbolize([x+1, y+1])] = piece
+            @blacks.push piece
           elsif(((x+1 == 8) || (x+1==1)) && (y+1 == 8))#Rook at the corner
-            @board_hash[symbolize([x+1, y+1])] = BlackRook.new([x+1,y+1], self)
+            piece = BlackRook.new([x+1,y+1], self)
+            @board_hash[symbolize([x+1, y+1])] = piece
+            @blacks.push piece
           elsif((x+1 == 2) || (x+1==7)) && (y+1 == 8)#black night
-            @board_hash[symbolize([x+1, y+1])] = BlackKnight.new([x+1,y+1], self)
+            piece = BlackKnight.new([x+1,y+1], self)
+            @board_hash[symbolize([x+1, y+1])] = piece
+            @blacks.push piece
           elsif((x+1 == 3) || (x+1==6)) && (y+1 == 8)#black bishop
-            @board_hash[symbolize([x+1,   y+1])] = BlackBishop.new([x+1,y+1], self)
+            piece = BlackBishop.new([x+1,y+1], self)
+            @board_hash[symbolize([x+1,   y+1])] = piece
+            @blacks.push piece
           elsif( x+1 == 4 ) && (y+1 == 8)#black Queen
-            @board_hash[symbolize([x+1, y+1])] = BlackQueen.new([x+1,y+1], self)
+            piece = BlackQueen.new([x+1,y+1], self)
+            @board_hash[symbolize([x+1, y+1])] = piece
+            @blacks.push piece
           elsif( x+1 == 5 ) && (y+1 == 8)#white King
-            @board_hash[symbolize([x+1, y+1])] = BlackKing.new([x+1,y+1], self)
+            piece = BlackKing.new([x+1,y+1], self)
+            @board_hash[symbolize([x+1, y+1])] = piece
+            @blacks.push piece
           else
             @board_hash[symbolize([x+1, y+1])] = true
           end
@@ -57,7 +86,14 @@ class Board < ChessItem
   end
 
   def run_game
+    white_turn = true
+
     while true
+      # @whites.each do |white|
+      #   white.checks.each do |checked|
+      #     puts "checked #{checked}"
+      #   end
+      # end
       draw
       coords = Array.new
       to_coords = Array.new
@@ -68,7 +104,16 @@ class Board < ChessItem
       coords.push(input.split(//)[1].to_i)
       to_coords.push(input.split(//)[2].ord - 'a'.ord + 1)
       to_coords.push(input.split(//)[3].to_i)
-      @board_hash[symbolize(coords)].move(to_coords)
+      if(white_turn && @board_hash[symbolize(coords)].class.name.include?("Black"))
+        puts "Buddy... it's Mr. White's turn.".colorize(:red)
+        white_turn ^= true
+      elsif(!white_turn && @board_hash[symbolize(coords)].class.name.include?("White"))
+        puts "Buddy... it's Mr. Black's turn.".colorize(:red)
+        white_turn ^= true
+      else
+        @board_hash[symbolize(coords)].move(to_coords)
+      end
+      white_turn ^= true
     end
   end
 

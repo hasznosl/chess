@@ -1,6 +1,9 @@
+require 'colorize'
+
 class Piece < ChessItem
   attr_reader :color
   attr_reader :coords
+  attr_reader :checks
 
   def initialize(coords, board)
     @coords = coords

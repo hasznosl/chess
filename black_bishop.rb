@@ -1,5 +1,6 @@
 require './bishop.rb'
 
+
 class BlackBishop < Bishop
 
   def can_move to_coords
@@ -11,6 +12,10 @@ class BlackBishop < Bishop
     else
       false
     end
+  end
+
+  def draw
+    "B".colorize(:blue)
   end
 
 end

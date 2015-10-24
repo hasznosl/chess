@@ -16,4 +16,8 @@ class WhiteQueen < Queen
     end
   end
 
+  def draw
+    "Q".colorize(:cyan)
+  end
+
 end

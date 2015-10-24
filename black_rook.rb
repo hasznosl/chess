@@ -17,6 +17,9 @@ class BlackRook < Rook
     end
   end
 
+  def draw
+    "R".colorize(:blue)
+  end
 
 
 

@@ -15,4 +15,8 @@ class WhiteKnight < Knight
     end
   end
 
+  def draw
+    "K".colorize(:cyan)
+  end
+
 end

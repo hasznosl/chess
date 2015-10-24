@@ -5,6 +5,43 @@ class Rook < Piece
     "R"
   end
 
+
+  def checks
+    @checks = Array.new
+    9.times do |i|
+      to_coords = [@coords[0], @coords[1] + i]
+      if road_blocked? to_coords
+        break
+      end
+      @checks.push(to_coords)
+    end
+
+    9.times do |i|
+      to_coords = [@coords[0], @coords[1] - i]
+      if road_blocked? to_coords
+        break
+      end
+      @checks.push(to_coords)
+    end
+
+    9.times do |i|
+      to_coords = [@coords[0] + i, @coords[1] ]
+      if road_blocked? to_coords
+        break
+      end
+      @checks.push(to_coords)
+    end
+
+    9.times do |i|
+      to_coords = [@coords[0] - i, @coords[1] ]
+      if road_blocked? to_coords
+        break
+      end
+      @checks.push(to_coords)
+    end
+    @checks
+  end
+
   private
 
   def road_blocked? to_coords

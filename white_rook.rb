@@ -17,6 +17,10 @@ class WhiteRook < Rook
     end
   end
 
+  def draw
+    "R".colorize(:cyan)
+  end
+
 
 
 

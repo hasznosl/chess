@@ -29,4 +29,8 @@ class WhitePawn < Pawn
     end
   end
 
+  def draw
+    "P".colorize(:cyan)
+  end
+
 end

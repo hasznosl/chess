@@ -1,8 +1,76 @@
-require './piece.rb'
+  require './piece.rb'
 
 class Queen < Piece
   def draw
     "Q"
+  end
+
+  def checks
+    @checks = Array.new
+    9.times do |i|
+      to_coords = [@coords[0] + i, @coords[1] + i]
+      if road_blocked? to_coords
+        break
+      end
+      @checks.push(to_coords)
+    end
+
+    9.times do |i|
+      to_coords = [@coords[0] - i, @coords[1] - i]
+      if road_blocked? to_coords
+        break
+      end
+      @checks.push(to_coords)
+    end
+
+    9.times do |i|
+      to_coords = [@coords[0] + i, @coords[1] - i]
+      if road_blocked? to_coords
+        break
+      end
+      @checks.push(to_coords)
+    end
+
+    9.times do |i|
+      to_coords = [@coords[0] - i, @coords[1] + i]
+      if road_blocked? to_coords
+        break
+      end
+      @checks.push(to_coords)
+    end
+
+    9.times do |i|
+      to_coords = [@coords[0], @coords[1] + i]
+      if road_blocked? to_coords
+        break
+      end
+      @checks.push(to_coords)
+    end
+
+    9.times do |i|
+      to_coords = [@coords[0], @coords[1] - i]
+      if road_blocked? to_coords
+        break
+      end
+      @checks.push(to_coords)
+    end
+
+    9.times do |i|
+      to_coords = [@coords[0] + i, @coords[1] ]
+      if road_blocked? to_coords
+        break
+      end
+      @checks.push(to_coords)
+    end
+
+    9.times do |i|
+      to_coords = [@coords[0] - i, @coords[1] ]
+      if road_blocked? to_coords
+        break
+      end
+      @checks.push(to_coords)
+    end
+    @checks
   end
 
   private
@@ -42,6 +110,8 @@ class Queen < Piece
       end
     end
   end
+
+
 
   def road_blocked_bishopishly? to_coords
     y_diff = to_coords[1] - @coords[1]

@@ -15,4 +15,8 @@ class BlackKnight < Knight
     end
   end
 
+  def draw
+    "K".colorize(:blue)
+  end
+
 end

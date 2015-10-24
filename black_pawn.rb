@@ -28,4 +28,9 @@ class BlackPawn < Pawn
       false
     end
   end
+
+  def draw
+    "P".colorize(:blue)
+  end
+
 end
