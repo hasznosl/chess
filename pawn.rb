@@ -9,7 +9,6 @@ class Pawn < Piece
   def occupied? arr_of_coords
     arr_of_coords.each do |coord|
       if(@board.board_hash[symbolize(coord)].is_a? Piece)
-        raise "#{coord} is occupied"
         return true
       end
     end

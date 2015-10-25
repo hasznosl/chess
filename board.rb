@@ -11,6 +11,7 @@ require './white_queen.rb'
 require './black_queen.rb'
 require './white_king.rb'
 require './black_king.rb'
+require 'colorize'
 
 class Board < ChessItem
 
@@ -143,7 +144,12 @@ class Board < ChessItem
         puts "Buddy... it's Mr. Black's turn.".colorize(:red)
         white_turn ^= true
       else
-        @board_hash[symbolize(coords)].move(to_coords)
+        begin
+          @board_hash[symbolize(coords)].move(to_coords)
+        rescue Exception => ex
+          white_turn ^= true
+          puts ex.to_s.colorize(:red)
+        end
         if @not_moved
           puts "Looks like that was not a legal move.".colorize(:red)
           white_turn ^= true
