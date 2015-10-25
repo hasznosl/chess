@@ -145,13 +145,29 @@ class Board < ChessItem
         white_turn ^= true
       else
         begin
-          @board_hash[symbolize(coords)].move(to_coords)
+          if (@white_checked || @black_checked)
+            #save the board, in case of illegal move we can roll back
+            @board_hash[symbolize(coords)].move(to_coords)
+            @whites.each do |white|
+              white.refresh_checks
+            end
+            @blacks.each do |black|
+              black.refresh_checks
+            end
+            check_if_checked
+            if (@white_checked || @black_checked)
+              @board_hash[symbolize(to_coords)].force_move(coords)
+              puts "You have to cease the check buddy.. If you can't it's checkmate!".colorize(:red)
+            end
+          else
+            @board_hash[symbolize(coords)].move(to_coords)
+          end
         rescue Exception => ex
           white_turn ^= true
           puts ex.to_s.colorize(:red)
         end
         if @not_moved
-          puts "Looks like that was not a legal move.".colorize(:red)
+          puts "Looks like that was an illegal move.".colorize(:red)
           white_turn ^= true
         end
       end
@@ -164,7 +180,8 @@ class Board < ChessItem
     @whites.each do |white|
       white.checks.each do |checked|
         if @black_king.coords == checked
-          return "Black King checked!"
+          @black_checked = true
+          return "Black King checked!".colorize(:red)
         end
       end
     end
@@ -172,10 +189,14 @@ class Board < ChessItem
     @blacks.each do |black|
       black.checks.each do |checked|
         if @white_king.coords == checked
-          return "White King checked!"
+          @white_checked = true
+          return "White King checked!".colorize(:red)
         end
       end
     end
+
+    @white_checked = false
+    @black_checked = false
 
     return ""
 

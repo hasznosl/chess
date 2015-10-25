@@ -16,11 +16,11 @@ class Piece < ChessItem
 
   def colorize_checked
     #should be nil eventually, this is only for debugging
-    @checks.each do |coord|
-      if (@board.board_hash[symbolize(coord)] == true )
-        @board.board_hash[symbolize(coord)] = :yellow
-      end
-    end
+    # @checks.each do |coord|
+    #   if (@board.board_hash[symbolize(coord)] == true )
+    #     @board.board_hash[symbolize(coord)] = :yellow
+    #   end
+    # end
   end
 
   def move to_coords
@@ -38,6 +38,14 @@ class Piece < ChessItem
     else
       @board.not_moved = true
     end
+  end
+
+  def force_move to_coords
+    @board.not_moved = true
+    @board.board_hash[symbolize(@coords)] = true
+    @board.board_hash[symbolize(to_coords)] = self
+    @coords = to_coords
+    refresh_checks
   end
 
 
