@@ -91,6 +91,10 @@ class Board < ChessItem
 
 
 
+    refresh_all_checks
+  end
+
+  def refresh_all_checks
     @whites.each do |white|
       white.refresh_checks
     end
@@ -150,12 +154,7 @@ class Board < ChessItem
           if (@white_checked || @black_checked)
             #save the board, in case of illegal move we can roll back
             @board_hash[symbolize(coords)].move(to_coords)
-            @whites.each do |white|
-              white.refresh_checks
-            end
-            @blacks.each do |black|
-              black.refresh_checks
-            end
+            refresh_all_checks
             check_if_checked
             if (@white_checked || @black_checked)
               @board_hash[symbolize(to_coords)].force_move(coords)
@@ -165,14 +164,19 @@ class Board < ChessItem
             end
           else
             @board_hash[symbolize(coords)].move(to_coords)
-            @whites.each do |white|
-              white.refresh_checks
+            refresh_all_checks
+            check_if_checked
+            if(@white_turn && @white_checked)
+              @board_hash[symbolize(to_coords)].force_move(coords)
+              puts "Your king is checked, if you move that!".colorize(:red)
+            elsif (!@white_turn && @black_checked)
+              @board_hash[symbolize(to_coords)].force_move(coords)
+              puts "Your king is checked, if you move that!".colorize(:red)
+            else
+              game_string = game_string == "" ? input : game_string + ", " + input
             end
-
-            @blacks.each do |black|
-              black.refresh_checks
-            end
-            game_string = game_string == "" ? input : game_string + ", " + input
+            refresh_all_checks
+            check_if_checked
           end
         rescue Exception => ex
           @white_turn ^= true
