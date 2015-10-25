@@ -16,6 +16,7 @@ class Knight < Piece
     @checks.push([@coords[0]+2, @coords[1]-1]) if @board.board_hash[symbolize([@coords[0]+2, @coords[1]-1])]
     @checks.push([@coords[0]-2, @coords[1]+1]) if @board.board_hash[symbolize([@coords[0]-2, @coords[1]+1])]
     @checks.push([@coords[0]-2, @coords[1]-1]) if @board.board_hash[symbolize([@coords[0]-2, @coords[1]-1])]
+    @checks.uniq!
     colorize_checked
     @checks
   end

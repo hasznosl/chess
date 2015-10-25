@@ -101,10 +101,11 @@ class Board < ChessItem
   end
 
   def run_game
-    white_turn = true
-
+    @white_turn = true
+    game_string = ""
 
     while true
+
 
       #only for debugging
       # checked_by_black = Array.new
@@ -120,13 +121,13 @@ class Board < ChessItem
       # end
 
       draw
-      (1..8).each do |x|
-        (1..8).each do |y|
-          if (@board_hash[symbolize([x, y])].is_a?(Symbol))
-            @board_hash[symbolize([x, y])] = true
-          end
-        end
-      end
+      # (1..8).each do |x|
+      #   (1..8).each do |y|
+      #     if (@board_hash[symbolize([x, y])].is_a?(Symbol))
+      #       @board_hash[symbolize([x, y])] = true
+      #     end
+      #   end
+      # end
       puts check_if_checked
       coords = Array.new
       to_coords = Array.new
@@ -137,12 +138,13 @@ class Board < ChessItem
       coords.push(input.split(//)[1].to_i)
       to_coords.push(input.split(//)[2].ord - 'a'.ord + 1)
       to_coords.push(input.split(//)[3].to_i)
-      if(white_turn && @board_hash[symbolize(coords)].class.name.include?("Black"))
+
+      if(@white_turn && @board_hash[symbolize(coords)].class.name.include?("Black"))
         puts "Buddy... it's Mr. White's turn.".colorize(:red)
-        white_turn ^= true
-      elsif(!white_turn && @board_hash[symbolize(coords)].class.name.include?("White"))
+        @white_turn ^= true
+      elsif(!@white_turn && @board_hash[symbolize(coords)].class.name.include?("White"))
         puts "Buddy... it's Mr. Black's turn.".colorize(:red)
-        white_turn ^= true
+        @white_turn ^= true
       else
         begin
           if (@white_checked || @black_checked)
@@ -158,20 +160,31 @@ class Board < ChessItem
             if (@white_checked || @black_checked)
               @board_hash[symbolize(to_coords)].force_move(coords)
               puts "You have to cease the check buddy.. If you can't it's checkmate!".colorize(:red)
+            else
+              game_string = game_string == "" ? input : game_string + ", " + input
             end
           else
             @board_hash[symbolize(coords)].move(to_coords)
+            @whites.each do |white|
+              white.refresh_checks
+            end
+
+            @blacks.each do |black|
+              black.refresh_checks
+            end
+            game_string = game_string == "" ? input : game_string + ", " + input
           end
         rescue Exception => ex
-          white_turn ^= true
+          @white_turn ^= true
           puts ex.to_s.colorize(:red)
         end
         if @not_moved
           puts "Looks like that was an illegal move.".colorize(:red)
-          white_turn ^= true
+          @white_turn ^= true
         end
       end
-      white_turn ^= true
+      @white_turn ^= true
+      puts game_string
     end
   end
 
@@ -205,6 +218,8 @@ class Board < ChessItem
 
   def draw
 
+    puts @white_turn ? "Mr White".colorize(:cyan) : "Mr Black".colorize(:blue)
+    puts ""
     puts "  ------------------------------- "
     puts "8| #{dp [1, 8]} | #{dp [2, 8]} | #{dp [3, 8]} | #{dp [4, 8]} | #{dp [5, 8]} | #{dp [6, 8]} | #{dp [7, 8]} | #{dp [8, 8]} |"
     puts "  ------------------------------- "

@@ -95,6 +95,7 @@ class Queen < Piece
       end
       @checks.push(to_coords)
     end
+    @checks.uniq!
     colorize_checked
     @checks
   end
@@ -104,17 +105,17 @@ class Queen < Piece
   def road_blocked_rookishly? to_coords
     if to_coords[0] == @coords[0]#moving in column
       if to_coords[1] > @coords[1]# moving up
-        (@coords[1]...to_coords[1]).each do |y|
-          coord = [@coords[0],y]
-          if ((@board.board_hash[symbolize(coord)].is_a? Piece) && (@board.board_hash[symbolize(coord)] != self) ) || (@board.board_hash[symbolize(coord)] == false)#road blocked
+        (@coords[1]..to_coords[1]).each do |y|
+          object = @board.board_hash[symbolize([@coords[0],y])]
+          if ((object.is_a? Piece) && (object != self) ) || (object == false)#road blocked
             return true
           end
         end
         return false
       else#moving down
-        (@coords[1].downto(to_coords[1]+1)).each do |y|
-          coord = [@coords[0],y]
-          if ((@board.board_hash[symbolize(coord)].is_a? Piece) && (@board.board_hash[symbolize(coord)] != self)) || (@board.board_hash[symbolize(coord)] == false)#road blocked
+        (@coords[1].downto(to_coords[1])).each do |y|
+          object = @board.board_hash[symbolize([@coords[0],y])]
+          if ((object.is_a? Piece) && (object != self)) || (object== false)#road blocked
             return true
           end
         end
@@ -122,17 +123,17 @@ class Queen < Piece
       end
     else#moving in row
       if to_coords[0] > @coords[0]# moving right
-        (@coords[0]...to_coords[0]).each do |x|
-          coord = [x,@coords[1]]
-          if ((@board.board_hash[symbolize(coord)].is_a? Piece) && (@board.board_hash[symbolize(coord)] != self)) || (@board.board_hash[symbolize(coord)] == false)#road blocked
+        (@coords[0]..to_coords[0]).each do |x|
+          object = @board.board_hash[symbolize([x,@coords[1]])]
+          if ((object.is_a? Piece) && (object != self)) || (object== false)#road blocked
             return true
           end
         end
         return false
       else#moving left
-        (@coords[0].downto(to_coords[0]+1)).each do |x|
-          coord = [x,@coords[1]]
-          if ((@board.board_hash[symbolize(coord)].is_a? Piece) && (@board.board_hash[symbolize(coord)] != self)) || (@board.board_hash[symbolize(coord)] == false)#road blocked
+        (@coords[0].downto(to_coords[0])).each do |x|
+          object = @board.board_hash[symbolize([x,@coords[1]])]
+          if ((object.is_a? Piece) && (object != self)) || (object== false)#road blocked
             return true
           end
         end
@@ -147,25 +148,28 @@ class Queen < Piece
     y_diff = to_coords[1] - @coords[1]
     x_diff = to_coords[0] - @coords[0]
     unless(x_diff == y_diff || x_diff == y_diff*(-1))
-      raise
+      raise "illegal bishopis check call"
     end
     y_range = nil
     x_range = nil
     if (y_diff < 0)
-      y_range = ((@coords[1]-1).downto(to_coords[1]+1))
+      y_range = ((@coords[1]).downto(to_coords[1])).to_a
     else
-      y_range = (@coords[1]+1)..(to_coords[1]-1)
+      y_range = ((@coords[1])..(to_coords[1])).to_a
     end
 
     if (x_diff < 0)
-      x_range = ((@coords[0]-1).downto(to_coords[0]+1))
+      x_range = ((@coords[0]).downto(to_coords[0])).to_a
     else
-      x_range = (@coords[0]+1)..(to_coords[0]-1)
+      x_range = ((@coords[0])..(to_coords[0])).to_a
     end
 
+
+    raise "x != y" if x_range.size != y_range.size
+
     x_range.size.times do |i|
-      x = x_range.to_a[i]
-      y = y_range.to_a[i]
+      x = x_range[i]
+      y = y_range[i]
       target_object = @board.board_hash[symbolize([x, y])]
       if((target_object.is_a?(Piece) || target_object == false) && (target_object != self))
         return true
